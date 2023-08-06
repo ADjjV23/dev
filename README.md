@@ -1,15 +1,31 @@
-# What is this?
+import os
+import ctypes
+from urllib.request import urlopen
 
-The github.dev web-based editor is a lightweight editing experience that runs entirely in your browser. You can navigate files and source code repositories from GitHub, and make and commit code changes.
+# Replace this with the URL of the image you want to set as the wallpaper
+# For example, you can use an image from a game you like
+wallpaper_url = "https://example.com/your_game_wallpaper.jpg"
 
-There are two ways to go directly to a VS Code environment in your browser and start coding:
+def set_wallpaper(image_path):
+    # Get the absolute path of the image file
+    abs_path = os.path.abspath(image_path)
 
-* Press the . key on any repository or pull request.
-* Swap `.com` with `.dev` in the URL. For example, this repo https://github.com/github/dev becomes http://github.dev/github/dev
+    # The SPI_SETDESKWALLPAPER code (20) signifies setting the desktop wallpaper
+    ctypes.windll.user32.SystemParametersInfoW(20, 0, abs_path, 3)
 
-Preview the gif below to get a quick demo of github.dev in action.
+def download_image(url, save_path):
+    with urlopen(url) as response, open(save_path, "wb") as out_file:
+        data = response.read()
+        out_file.write(data)
 
-![github dev](https://user-images.githubusercontent.com/856858/130119109-4769f2d7-9027-4bc4-a38c-10f297499e8f.gif)
+def main():
+    # Download the image from the given URL and save it as wallpaper.jpg
+    wallpaper_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "wallpaper.jpg")
+    download_image(wallpaper_url, wallpaper_path)
 
-# Why?
-It’s a quick way to edit and navigate code. It's especially useful if you want to edit multiple files at a time or take advantage of all the powerful code editing features of Visual Studio Code when making a quick change. For more information, see our [documentation](https://github.co/codespaces-editor-help).
+    # Set the downloaded image as the wallpaper
+    set_wallpaper(wallpaper_path)
+
+if __name__ == "__main__":
+    main()
+    </html>
